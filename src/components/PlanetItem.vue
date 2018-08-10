@@ -1,23 +1,25 @@
 <template>
-  <div class="column is-two-thirds">
+  <div class="column is-half">
         <div class="card">
       <div class="card-content">
-        <p class="subtitle is-4">
-          "{{item.opening_crawl.slice(0, 100)+'...'}}"
-        </p>
         <p class="title is-2">
-          {{item.title}}
+          "{{item.name}}"
+        </p>
+        <p class="subtitle is-2">
+          <b>Climate:</b>{{item.climate}}
         </p>
       </div>
       <footer class="card-footer">
         <p class="card-footer-item">
           <span>
-            View on <a href="https://twitter.com/codinghorror/status/506010907021828096">Twitter</a>
+            <h2 class="subtitle is-5"><b>Population: </b>{{item.population}}</h2>
           </span>
         </p>
         <p class="card-footer-item">
           <span>
-            Share on <a href="#">Facebook</a>
+            <h2 class="subtitle is-5">
+                            <b>Diameter: </b> {{item.diameter}}
+            </h2>
           </span>
         </p>
       </footer>

@@ -1,54 +1,75 @@
 <template>
   <div class='container has-text-centered has-text-warning'>
     <section class="section">
-      <h2 class="title is-2 has-text-warning">Characters</h2>
-          <p class="content"><b>Selected:</b> {{ selected }}</p>
-    <b-field label="Find a JS framework">
-        <b-autocomplete
-            rounded
-            v-model="name"
-            :data="propositions"
-            :placeholder="films[0].title"
-            icon="magnify"
-            @select="option => selected = option">
-            <template slot="empty">No results found</template>
+      <h2 class="title is-2 has-text-warning">Films</h2>
+      <p class="content"><b>Selected:</b> {{ selected }}</p>
+      <b-field label="Find film">
+        <b-autocomplete rounded v-model="name" :data="propositions" :placeholder="'e.g. '+films[0].title" icon="magnify" @select="option => selected = option">
+          <template slot="empty">No results found
+</template>
         </b-autocomplete>
     </b-field>
-    <div class="columns is-multiline">
-      <film-item v-for="item in filteredDataArray" :item='item' :key="item.id">
+        <!-- <hr> -->
+    <b-pagination
+        :total="filteredDataArray.length"
+        :current.sync="current"
+        order="is-centered"
+        size="is-medium"
+        :simple="false"
+        :rounded="false"
+        :per-page="perPage">
+    </b-pagination>
+    <div class="columns center is-multiline">
+      <film-item v-for="item in slicedDataArray" :item='item' :key="item.id">
         {{ item }}
       </film-item>
     </div>
+    <b-pagination
+        :total="filteredDataArray.length"
+        :current.sync="current"
+        order="is-centered"
+        size="is-medium"
+        :simple="false"
+        :rounded="false"
+        :per-page="perPage">
+    </b-pagination>
   </section>
   </div>
 </template>
 
 <script>
-import * as R from 'ramda';
-import * as helpers from '../utils'
+  import * as R from 'ramda';
   import * as types from '../store/types'
+  import * as helpers from '../utils'
   import FilmItem from './FilmItem'
   export default {
     data: () => ({
       name: '',
+      current: 1,
       selected: null,
+      perPage: 3
     }),
     computed: {
       films() {
         return this.$store.getters[types.FILMS];
       },
       propositions() {
-        return this.filteredDataArray.length > 1? []:this.filteredDataArray.map(x => x.title)
+        return this.filteredDataArray.length > 1 ? [] : this.filteredDataArray.map(x => x.title)
       },
       filteredDataArray() {
+
         const createRegExp = str => new RegExp(str, 'i');
-            const reg = createRegExp(this.name);
-          return this.films.reduce((acc, curr) => {
-            if (helpers.testMatchAtLeastOneProp(reg)(curr)) {
-              return [...acc, curr];
-            }
-            else return acc;
-          }, [])
+        const reg = createRegExp(this.name);
+        return this.films.reduce((acc, curr) => {
+          if (helpers.testMatchAtLeastOneProp(reg)(curr)) {
+            return [...acc, curr];
+          } else return acc;
+        }, []);
+      },
+      slicedDataArray() {
+        const rangeStart = this.perPage * (this.current-1);
+        const rangeEnd = rangeStart + this.perPage;
+        return this.filteredDataArray.slice(rangeStart, rangeEnd);
       }
     },
     components: {
@@ -59,5 +80,9 @@ import * as helpers from '../utils'
 </script>
 
 <style scoped>
-
+  .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 </style>
