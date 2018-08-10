@@ -72,6 +72,7 @@
         return this.filteredDataArray.slice(rangeStart, rangeEnd);
       }
     },
+
     components: {
       FilmItem
     }
