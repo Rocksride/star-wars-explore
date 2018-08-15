@@ -1,4 +1,5 @@
 import axios from 'axios'
+import 'es6-promise/auto'
 
 export const getPeople = () => axios.get('people');
 export const getFilms = () => axios.get('films');

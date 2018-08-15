@@ -7,7 +7,6 @@ import Buefy from 'buefy'
 import VueRx from 'vue-rx'
 import Rx from 'rxjs'
 import axios from 'axios'
-
 axios.defaults.baseURL = `https://starwars.egghead.training/`
 
 import 'buefy/lib/buefy.css'

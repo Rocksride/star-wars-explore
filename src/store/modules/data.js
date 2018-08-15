@@ -6,7 +6,8 @@ const state = {
   planets: [],
   species: [],
 }
-import * as api from '../../api'
+
+import * as api from '@/api'
 import * as types from '../types'
 import {
   Toast
@@ -15,7 +16,7 @@ import {
   from,
   forkJoin,
   defer,
-  of ,
+  of,
   EMPTY,
 } from 'rxjs'
 import {
@@ -28,6 +29,121 @@ import {
 } from 'rxjs/operators'
 
 const log = tap(console.log);
+
+
+
+export const actions = {
+  [types.LOAD_FILMS]: ({
+    commit
+  }) => {
+    defer(() => api.getFilms()).pipe(
+      pluck('data'),
+      retryWhen(errorObs => errorObs.pipe(delay(1000)))
+    ).subscribe(
+      data => {
+        commit(types.MUTATE_SET_FILMS, data);
+      },
+      err => {
+        console.log(err);
+      })
+  },
+  [types.LOAD_PEOPLE]: ({
+    commit
+  }) => {
+    defer(() => api.getPeople()).pipe(
+      retryWhen(errorObs => errorObj.pipe(delay(1000))),
+      pluck('data')
+    ).
+      subscribe(
+        data => {
+          commit(types.MUTATE_SET_PEOPLE, data);
+        },
+        error => {
+          console.log(err);
+        })
+  },
+  [types.LOAD_PLANETS]: ({
+    commit
+  }) => {
+    defer(() => api.getPlanets()).pipe(
+      retryWhen(errorObs => errorObj.pipe(delay(1000))),
+      pluck('data')
+    ).
+      subscribe(
+        data => {
+          commit(types.MUTATE_SET_PLANETS, data);
+        },
+        error => {
+          console.log(err);
+        })
+  },
+  [types.LOAD_SPECIES]: ({
+    commit
+  }) => {
+    defer(() => api.getSpecies()).pipe(
+      retryWhen(errorObs => errorObj.pipe(delay(1000))),
+      pluck('data')
+    ).
+      subscribe(
+        data => {
+          commit(types.MUTATE_SET_SPECIES, data);
+        },
+        error => {
+          console.log(err);
+        })
+  },
+  [types.LOAD_STARSHIPS]: ({
+    commit
+  }) => {
+    defer(() => api.getStarships()).pipe(
+      retryWhen(errorObs => errorObj.pipe(delay(1000))),
+      pluck('data')
+    ).
+      subscribe(
+        data => {
+          commit(types.MUTATE_SET_STARSHIPS, data);
+        },
+        error => {
+          console.log(err);
+        })
+  },
+  [types.LOAD_VEHICLES]: ({
+    commit
+  }) => {
+    defer(() => api.getVehicles()).pipe(
+      retryWhen(errorObs => errorObj.pipe(delay(1000))),
+      pluck('data')
+    ).
+      subscribe(
+        data => {
+          commit(types.MUTATE_SET_VEHICLES, data);
+          // Toast.open({
+          //   type: 'is-success',
+          //   message: 'success',
+          //   position: 'is-top',
+          //   duration: 500
+          // })
+        },
+        error => {
+          console.log(err);
+          // Toast.open({
+          //   type: 'is-danger',
+          //   message: 'vehicles data was not loaded',
+          //   position: 'is-top',
+          //   duration: 500
+          // })
+        })
+  },
+  [types.LOAD_DATA]: ({ dispatch }) => {
+    dispatch(types.LOAD_FILMS);
+    dispatch(types.LOAD_PEOPLE);
+    dispatch(types.LOAD_PLANETS);
+    dispatch(types.LOAD_VEHICLES);
+    dispatch(types.LOAD_SPECIES);
+    dispatch(types.LOAD_STARSHIPS);
+  }
+}
+
 
 const getters = {
   [types.PEOPLE]: state => state.people,
@@ -47,183 +163,7 @@ const mutations = {
   [types.MUTATE_SET_VEHICLES]: (state, payload) => state.vehicles = payload,
 }
 
-const actions = {
-  [types.LOAD_FILMS]: ({
-    commit
-  }) => {
-    defer(() => api.getFilms()).pipe(
-      log,
-      pluck('data'),
-      retryWhen(errorObs => errorObs.pipe(delay(1000)))
-    ).subscribe(
-      data => {
-        commit(types.MUTATE_SET_FILMS, data);
-        // Toast.open({
-        //   type: 'is-success',
-        //   message: 'success',
-        //   position: 'is-top',
-        //   duration: 500
-        // })
-      },
-      err => {
-        console.log(err);
-        // Toast.open({
-        //   type: 'is-danger',
-        //   message: err.message,
-        //   position: 'is-top',
-        //   duration: 500
-        // })
-      })
-  },
-  [types.LOAD_PEOPLE]: ({
-    commit
-  }) => {
-    defer(() => api.getPeople()).pipe(
-      log,
-      retryWhen(errorObs => errorObj.pipe(delay(1000))),
-      pluck('data')
-    ).
-    subscribe(
-      data => {
-        commit(types.MUTATE_SET_PEOPLE, data);
-        // Toast.open({
-        //   type: 'is-success',
-        //   message: 'success',
-        //   position: 'is-top',
-        //   duration: 500
-        // })
-      },
-      error => {
-        console.log(err);
-        // Toast.open({
-        //   type: 'is-danger',
-        //   message: 'people data was not loaded',
-        //   position: 'is-top',
-        //   duration: 500
-        // })
-      })
-  },
-  [types.LOAD_PLANETS]: ({
-    commit
-  }) => {
-    defer(() => api.getPlanets()).pipe(
-      log,
-      retryWhen(errorObs => errorObj.pipe(delay(1000))),
-      pluck('data')
-    ).
-    subscribe(
-      data => {
-        commit(types.MUTATE_SET_PLANETS, data);
-        // Toast.open({
-        //   type: 'is-success',
-        //   message: 'success',
-        //   position: 'is-top',
-        //   duration: 500
-        // })
-      },
-      error => {
-        console.log(err);
-        // Toast.open({
-        //   type: 'is-danger',
-        //   message: 'planets data was not loaded',
-        //   position: 'is-top',
-        //   duration: 500
-        // })
-      })
-  },
-  [types.LOAD_SPECIES]: ({
-    commit
-  }) => {
-    defer(() => api.getSpecies()).pipe(
-      log,
-      retryWhen(errorObs => errorObj.pipe(delay(1000))),
-      pluck('data')
-    ).
-    subscribe(
-      data => {
-        commit(types.MUTATE_SET_SPECIES, data);
-        // Toast.open({
-        //   type: 'is-success',
-        //   message: 'success',
-        //   position: 'is-top',
-        //   duration: 500
-        // })
-      },
-      error => {
-        console.log(err);
-        // Toast.open({
-        //   type: 'is-danger',
-        //   message: 'species data was not loaded',
-        //   position: 'is-top',
-        //   duration: 500
-        // })
-      })
-  },
-  [types.LOAD_STARSHIPS]: ({
-    commit
-  }) => {
-    defer(() => api.getStarships()).pipe(
-      log,
-      retryWhen(errorObs => errorObj.pipe(delay(1000))),
-      pluck('data')
-    ).
-    subscribe(
-      data => {
-        commit(types.MUTATE_SET_STARSHIPS, data);
-        // Toast.open({
-        //   type: 'is-success',
-        //   message: 'success',
-        //   position: 'is-top',
-        //   duration: 500
-        // })
-      },
-      error => {
-        console.log(err);
-        // Toast.open({
-        //   type: 'is-danger',
-        //   message: 'starships data was not loaded',
-        //   position: 'is-top',
-        //   duration: 500
-        // })
-      })
-  },
-  [types.LOAD_VEHICLES]: ({
-    commit
-  }) => {
-    defer(() => api.getVehicles()).pipe(
-      log,
-      retryWhen(errorObs => errorObj.pipe(delay(1000))),
-      pluck('data')
-    ).
-    subscribe(
-      data => {
-        commit(types.MUTATE_SET_VEHICLES, data);
-        // Toast.open({
-        //   type: 'is-success',
-        //   message: 'success',
-        //   position: 'is-top',
-        //   duration: 500
-        // })
-      },
-      error => {
-        console.log(err);
-        // Toast.open({
-        //   type: 'is-danger',
-        //   message: 'vehicles data was not loaded',
-        //   position: 'is-top',
-        //   duration: 500
-        // })
-      })
-  },
-  [types.LOAD_DATA]: ({dispatch}) => {
-    dispatch(types.LOAD_FILMS);
-    dispatch(types.LOAD_PEOPLE);
-    dispatch(types.LOAD_PLANETS);
-    dispatch(types.LOAD_VEHICLES);
-    dispatch(types.LOAD_SPECIES);
-    dispatch(types.LOAD_STARSHIPS);
-  }
-}
+
 
 export default {
   state,
