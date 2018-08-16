@@ -1,5 +1,5 @@
 # star-wars-app
-[go to the website &rarr;](https://github.com/Rocksride/star-wars-explore.git)
+
 > A Vue.js project
 
 ## Build Setup
